@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en" class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Riviera Tee — Product Page + Mini Cart</title>
+    <meta name="description" content="Demo product page with accessible mini cart and LocalStorage persistence." />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- Header -->
+    <header class="site">
+        <div class="container header-row">
+            <div class="brand">
+                <span class="logo" aria-hidden="true"></span>
+                <a href="./"><strong>VistaWear</strong></a>
+            </div>
+            <nav aria-label="Primary" class="nav">
+                <a href="#details">Details</a>
+                <a href="#reviews">Reviews</a>
+                <a href="#faq">FAQ</a>
+            </nav>
+
+            <!-- Cart button (opens modal) -->
+            <button id="openCart" class="btn cart-btn" aria-haspopup="dialog" aria-controls="miniCart"
+                aria-expanded="false">
+                🛒 <span class="sr-only">Open cart</span>
+                <span id="cartCount" class="badge" aria-live="polite">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main id="main">
+        <!-- Product section -->
+        <section class="container product">
+            <!-- Gallery -->
+            <div class="gallery">
+                <figure class="main-img card">
+                    <img id="heroImg" src="imgs/tee.jpg" alt="Riviera Tee front view in sand color" loading="eager">
+                    <figcaption class="muted">Use ← → keys to switch photos</figcaption>
+                    <div class="hero-controls" aria-hidden="true">
+                        <button class="btn ghost" id="prevImg" title="Previous image">←</button>
+                        <button class="btn ghost" id="nextImg" title="Next image">→</button>
+                    </div>
+                </figure>
+
+                <div class="thumbs" role="listbox" aria-label="Product images">
+                    <!-- NOTE:
+               data-full = big image (1000x1000)
+               img src   = thumb (240x240)  // has "-thumb" in URL on purpose
+               JS replaces '-thumb' to pick the big image for cart preview.
+          -->
+                    <button class="thumb is-active" role="option" aria-selected="true"
+                        data-full="https://source.unsplash.com/featured/1000x1000?shirt,tshirt,apparel&sig=1"
+                        data-alt="Front view">
+                        <img src="imgs/tee.jpg" alt="Front view thumbnail" loading="lazy">
+                    </button>
+
+                    <button class="thumb" role="option"
+                        data-full="https://source.unsplash.com/featured/1000x1000?shirt,tshirt,apparel&sig=2"
+                        data-alt="Back view">
+                        <img src="imgs/tee.jpg" alt="Back view thumbnail" loading="lazy">
+                    </button>
+
+                    <button class="thumb" role="option"
+                        data-full="https://source.unsplash.com/featured/1000x1000?shirt,tshirt,detail&sig=3"
+                        data-alt="Stitch detail">
+                        <img src="imgs/tee.jpg" alt="Stitch detail thumbnail" loading="lazy">
+                    </button>
+
+                    <button class="thumb" role="option"
+                        data-full="https://source.unsplash.com/featured/1000x1000?shirt,tshirt,lifestyle&sig=4"
+                        data-alt="Lifestyle photo">
+                        <img src="imgs/tee.jpg" alt="Lifestyle thumbnail" loading="lazy">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Details / Variants -->
+            <div class="details card" id="details">
+                <h1 class="title">Riviera Tee</h1>
+                <p class="muted">Ultra-soft cotton tee with coastal stitch detail.</p>
+                <div class="price-row">
+                    <div class="price">$24.90</div>
+                    <div class="stock ok">In stock</div>
+                </div>
+
+                <!-- Color -->
+                <fieldset class="variant">
+                    <legend>Color</legend>
+                    <div class="color-swatches" role="radiogroup" aria-label="Select color">
+                        <input type="radio" id="col-sand" name="color" value="Sand" checked>
+                        <label for="col-sand" class="swatch" style="--sw:#c8b79f" title="Sand">Sand</label>
+
+                        <input type="radio" id="col-ink" name="color" value="Ink">
+                        <label for="col-ink" class="swatch" style="--sw:#1b2230" title="Ink">Ink</label>
+
+                        <input type="radio" id="col-forest" name="color" value="Forest">
+                        <label for="col-forest" class="swatch" style="--sw:#2c5f48" title="Forest">Forest</label>
+                    </div>
+                </fieldset>
+
+                <!-- Size -->
+                <fieldset class="variant">
+                    <legend>Size</legend>
+                    <div class="sizes" role="radiogroup" aria-label="Select size">
+                        <input type="radio" id="sz-s" name="size" value="S">
+                        <label for="sz-s" class="chip">S</label>
+
+                        <input type="radio" id="sz-m" name="size" value="M" checked>
+                        <label for="sz-m" class="chip">M</label>
+
+                        <input type="radio" id="sz-l" name="size" value="L">
+                        <label for="sz-l" class="chip">L</label>
+
+                        <input type="radio" id="sz-xl" name="size" value="XL">
+                        <label for="sz-xl" class="chip">XL</label>
+                    </div>
+                </fieldset>
+
+                <!-- Quantity -->
+                <div class="qty">
+                    <label for="qty">Qty</label>
+                    <div class="stepper">
+                        <button class="btn ghost" id="decQty" aria-label="Decrease quantity">−</button>
+                        <input id="qty" type="number" min="1" max="10" value="1" inputmode="numeric">
+                        <button class="btn ghost" id="incQty" aria-label="Increase quantity">+</button>
+                    </div>
+                </div>
+
+                <div class="cta-row">
+                    <button id="addToCart" class="btn">Add to Cart</button>
+                    <button id="buyNow" class="btn ghost">Buy Now</button>
+                </div>
+
+                <ul class="bullets">
+                    <li>100% combed cotton</li>
+                    <li>Pre-shrunk, relaxed fit</li>
+                    <li>Machine wash cold</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Long content anchors -->
+        <section class="container" id="reviews">
+            <h2>What people say</h2>
+            <div class="reviews">
+                <article class="quote card">“Buttery soft and the Sand color is perfect.” — <strong>Jane</strong>
+                </article>
+                <article class="quote card">“True to size. Will get another in Ink.” — <strong>Marco</strong></article>
+            </div>
+        </section>
+
+        <section class="container" id="faq">
+            <h2>FAQ</h2>
+            <details class="card">
+                <summary>Shipping times?</summary>
+                <p>2–5 business days domestic.</p>
+            </details>
+            <details class="card">
+                <summary>Returns?</summary>
+                <p>30-day no-questions-asked returns.</p>
+            </details>
+        </section>
+    </main>
+
+    <!-- Accessible Mini Cart (modal drawer) -->
+    <div id="miniCart" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle"
+        aria-describedby="cartDesc" hidden>
+        <div class="drawer">
+            <header class="drawer-head">
+                <h2 id="cartTitle">Your Cart</h2>
+                <p id="cartDesc" class="muted">Review items and proceed to checkout.</p>
+                <button id="closeCart" class="btn ghost" aria-label="Close cart">✕</button>
+            </header>
+
+            <div id="cartItems" class="cart-items" tabindex="0">
+                <!-- items injected here -->
+            </div>
+
+            <footer class="drawer-foot">
+                <div class="totals">
+                    <span class="muted">Subtotal</span>
+                    <strong id="cartSubtotal">$0.00</strong>
+                </div>
+                <button class="btn" id="checkout">Checkout</button>
+            </footer>
+        </div>
+        <!-- Backdrop -->
+        <div class="backdrop" data-close></div>
+    </div>
+
+    <footer class="container site-foot">
+        <p class="muted">© <span id="year"></span> VistaWear. Demo project for portfolio — not a real store.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
